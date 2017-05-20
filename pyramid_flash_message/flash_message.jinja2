@@ -1,0 +1,7 @@
+{% for message in request.session.pop_flash() %}
+    <div class="alert alert-small alert-{{ message['type'] }}" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                aria-hidden="true">&times;</span></button>
+        <b style="font-size: larger; letter-spacing: -1px">{{ _(message['source']) | safe }}</b>: {{ _(message['body']).format(**message['mapping']) | safe}}
+    </div>
+{% endfor %}
