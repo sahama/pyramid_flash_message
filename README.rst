@@ -43,6 +43,7 @@ v 0.1
 -----
 
  - refactor as package
+ - some debug
 
 v 0.0
 -----

@@ -14,7 +14,7 @@ requires = [
 
 
 setup(name='pyramid_flash_message',
-      version='0.1.0',
+      version='0.1.1',
       description='Small tool to add and show flash messages',
       long_description=README,
       classifiers=[
