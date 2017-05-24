@@ -28,7 +28,9 @@ class MessageQueue():
 
         # TODO: check if message queue is full
 
-        self.request.session.flash({"type": self.type, 'source': self.source, 'body': self.body, 'mapping': self.mapping})
+        request = get_current_request()
+
+        request.session.flash({"type": self.type, 'source': self.source, 'body': self.body, 'mapping': self.mapping})
 
 
 
