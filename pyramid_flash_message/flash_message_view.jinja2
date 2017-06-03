@@ -1,0 +1,14 @@
+{% extends main_template %}
+
+{% block content %}
+    {% for message in messages %}
+        <div class="alert alert-small alert-{{ message['type'] }}" role="alert">
+            {% if message['source'] %}<b style="font-size: larger; letter-spacing: -1px">{{ _(message['source'], mapping=message['mapping']) | safe }}</b>:{% endif %}
+            {{ _(message['body'], mapping=message['mapping']) }}
+        </div>
+    {% endfor %}
+    {{ panel('pagination',current_page, total_page) }}
+{% endblock content %}
+{% block title %}
+    messages
+{% endblock %}
