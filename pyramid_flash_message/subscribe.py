@@ -11,10 +11,8 @@ from .message import MessageQueue
 def flash_message_panel(context, request: Request, per_page=None, read=True):
 
     if not per_page:
-        default_per_page = request.registry.settings.get('flash_message.default_per_page', 20)
-        per_page = int(request.params.get('per_page', default_per_page))
+        per_page = request.registry.settings.get('flash_message.default_per_page', 20)
 
-    print(per_page)
     if read:
         messages = request.session.pop_flash()[:per_page * -1: -1]
     else:
