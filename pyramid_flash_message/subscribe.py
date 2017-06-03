@@ -1,4 +1,5 @@
 import math
+import time
 from pyramid.events import NewRequest
 from pyramid.events import subscriber
 from pyramid.request import Request
@@ -24,19 +25,21 @@ def flash_message_panel(context, request: Request, per_page=None, read=True):
 @view_config(route_name='flash_message', permission='user', xhr=True, renderer='json')
 @view_config(route_name='flash_message', permission='user', renderer='pyramid_flash_message:flash_message_view.jinja2')
 def message_view(context, request: Request):
-    page = int(request.params.get('message_page', 1))
-    default_per_page = request.registry.settings.get('flash_message.default_per_page', 100)
+    page = int(request.params.get('page', 1))
+    default_per_page = request.registry.settings.get('flash_message.default_per_page', 20)
     per_page = int(request.params.get('per_page', default_per_page))
     read = True if request.params.get('read') else False
 
     current_page = page
+    request.message_queue.add(time.time())
+
 
     if read:
-        messages = request.session.pop_flash()[page * per_page:(page - 1) * per_page: -1]
+        messages = request.session.pop_flash()[::-1][(page - 1) * per_page: page * per_page:]
     else:
-        messages = request.session.peek_flash()[ page * per_page: (page - 1) * per_page: -1]
+        messages = request.session.peek_flash()[::-1][(page - 1) * per_page: page * per_page:]
 
-    total_page = math.ceil(len(messages) / per_page)
+    total_page = math.ceil(len(request.session.peek_flash()) / per_page)
 
     return {'messages': messages, "current_page": current_page, 'total_page': total_page}
 

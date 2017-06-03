@@ -7,7 +7,37 @@
             {{ _(message['body'], mapping=message['mapping']) }}
         </div>
     {% endfor %}
-    {{ panel('pagination',current_page, total_page) }}
+
+
+
+    <nav class="text-center">
+    <ul class="pagination">
+    {% set current_page = current_page-1 %}
+        {% if current_page > 0 %}
+            <li class="page-item">
+                <a class="page-link" href="{{ '?page='+ (current_page).__str__() }}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                    <span class="sr-only">Previous</span>
+                </a>
+            </li>
+        {% endif %}
+        {% for i in range(current_page - 5 if current_page > 5 else 0, current_page + 6 if current_page + 6 < total_page else total_page) %}
+            <li {% if i == current_page %}class="active"{% endif %}><a
+                    href="{{ '?page='+ (i+1).__str__() }}">
+                {{ i+1 }}</a></li>
+        {% endfor %}
+        {% if current_page < total_page - 1 %}
+            <li class="page-item">
+                <a class="page-link" href="{{ '?page='+ (current_page+2).__str__() }}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </li>
+        {% endif %}
+    </ul>
+</nav>
+
+
 {% endblock content %}
 {% block title %}
     messages
