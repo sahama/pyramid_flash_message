@@ -1,5 +1,6 @@
 from pyramid.threadlocal import get_current_request
 
+
 class MessageQueue():
     danger = 'danger'
     warning = 'warning'
@@ -11,7 +12,6 @@ class MessageQueue():
         self.body = body
         self.source = source
         self.mapping = mapping
-
 
         if not (source or body):
             self.body = 'no notice found'
@@ -32,8 +32,6 @@ class MessageQueue():
 
         request.session.flash({"type": self.type, 'source': self.source, 'body': self.body, 'mapping': self.mapping})
 
-
-
     def __repr__(self):
         request = get_current_request()
         user = request.authenticated_userid
@@ -42,7 +40,7 @@ class MessageQueue():
             self.type,
             user,
             (self.body, self.mapping),
-            (lambda x : x.remote_addr if x else '')(request)
+            (lambda x: x.remote_addr if x else '')(request)
         )
 
     def __str__(self):

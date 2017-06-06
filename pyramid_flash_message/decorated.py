@@ -10,7 +10,6 @@ from .message import MessageQueue
 
 @panel_config(name='flash_message', renderer='pyramid_flash_message:flash_message_panel.jinja2')
 def flash_message_panel(context, request: Request, per_page=None, read=True):
-
     if not per_page:
         per_page = request.registry.settings.get('flash_message.default_per_page', 20)
 
@@ -19,7 +18,7 @@ def flash_message_panel(context, request: Request, per_page=None, read=True):
     else:
         messages = request.session.peek_flash()[:per_page * -1: -1]
 
-    return {'flash_message_queue': messages}
+    return {'messages': messages, 'read': read}
 
 
 @view_config(route_name='flash_message', permission='user', xhr=True, renderer='json')
@@ -31,8 +30,6 @@ def message_view(context, request: Request):
     read = True if request.params.get('read') else False
 
     current_page = page
-    request.message_queue.add(time.time())
-
 
     if read:
         messages = request.session.pop_flash()[::-1][(page - 1) * per_page: page * per_page:]
@@ -41,11 +38,11 @@ def message_view(context, request: Request):
 
     total_page = math.ceil(len(request.session.peek_flash()) / per_page)
 
-    return {'messages': messages, "current_page": current_page, 'total_page': total_page}
+    return {'messages': messages, "current_page": current_page, 'total_page': total_page, 'read': read}
 
 
 @subscriber(NewRequest)
 def add_message(event):
     request = event.request
-    message_queue = MessageQueue(request=request)
-    request.message_queue = message_queue
+    flash_message = MessageQueue(request=request)
+    request.flash_message = flash_message
