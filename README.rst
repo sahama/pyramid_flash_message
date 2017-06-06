@@ -79,6 +79,12 @@ You can use `project issue page <https://github.com/sahama/pyramid_flash_message
 Changes
 =======
 
+v 0.2.1
+-----
+
+ - add message count
+ - some bugfix
+
 v 0.2
 -----
 
