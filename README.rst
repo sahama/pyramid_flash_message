@@ -23,16 +23,23 @@ by default in instant of MessageQueue added to request object so you can use req
 pyramid_flash_message use default pyramid i18n system. so you can pass `mapping` arg to use in translation.
 also if you like to show source of message you can use `source` arg.
 
-now for show flash message you can use `flash_message` panel
+now for show flash message you can use `flash_message` panel in your templates
 
-.. code-block:: jinja2
+.. code-block:: html
+
+    panel('flash_message', per_page=20, read=False)
+
+for instance in jinja2 templates
+
+.. code-block:: html
 
     {{ panel('flash_message', per_page=20, read=False) }}
+
 
 there is also flash_message view than get `page` and `per_page` and `read` params for paged view of messages.
 this params will get via GET method so you can use it via
 
-.. code-block:: jinja2
+.. code-block:: html
 
     <a href="{{ request.route_url('flash_message') }}">View all messages</a>
     <a href="{{ request.route_url('flash_message') }}?read=true">View and mark read</a>
@@ -41,6 +48,7 @@ this params will get via GET method so you can use it via
 
 Installation
 ------------
+
 
 .. code-block:: bash
 
@@ -70,16 +78,21 @@ You can use `project issue page <https://github.com/sahama/pyramid_flash_message
 Changes
 =======
 
+v 0.2
+-----
+
+ - some bugfix and documentation
+
 v 0.1.6
 -------
 
- - some debug (now you can use it)
+ - some bugfix (now you can use it)
 
 v 0.1
 -----
 
  - refactor as package
- - some debug
+ - some bugfix
 
 v 0.0
 -----
