@@ -7,13 +7,12 @@ class MessageQueue():
     info = 'info'
     success = 'success'
 
-    def __init__(self, body='', message_type=info, source='', mapping={}, **kwargs):
+    def __init__(self, message_type=info, source='', mapping={}, **kwargs):
         self.type = message_type
-        self.body = body
         self.source = source
         self.mapping = mapping
 
-        if not (source or body):
+        if not (source):
             self.body = 'no notice found'
             self.type = MessageQueue.info
 
@@ -31,6 +30,17 @@ class MessageQueue():
         request = get_current_request()
 
         request.session.flash({"type": self.type, 'source': self.source, 'body': self.body, 'mapping': self.mapping})
+
+        while True:
+            try:
+                request.session._set_cookie(request.response)
+                break
+            except:
+                request.session['_f_'].pop(0)
+
+    def __len__(self):
+        request = get_current_request()
+        return len(request.session.peek_flash())
 
     def __repr__(self):
         request = get_current_request()

@@ -49,6 +49,7 @@ this params will get via GET method so you can use it via
 Installation
 ------------
 
+for installing pyrmaid_flash_message
 
 .. code-block:: bash
 
