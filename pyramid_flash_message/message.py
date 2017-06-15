@@ -7,7 +7,7 @@ class MessageQueue():
     info = 'info'
     success = 'success'
 
-    def __init__(self, message_type=info, source='', mapping={}, **kwargs):
+    def __init__(self, message_type=info, source='', mapping={}, domain=None, **kwargs):
         self.type = message_type
         self.source = source
         self.mapping = mapping
@@ -16,21 +16,28 @@ class MessageQueue():
             self.body = 'no notice found'
             self.type = MessageQueue.info
 
-    def add(self, body, message_type=None, source=None, mapping=None, **kwargs):
+    def add(self, body, message_type=None, source=None, mapping=None, domain=None, **kwargs):
         if message_type:
             self.type = message_type
         if source:
             self.source = source
         if mapping:
             self.mapping = mapping
+
+        self.domain = domain
         self.body = body
 
         # TODO: check if message queue is full
 
         request = get_current_request()
 
-        request.session.flash({"type": self.type, 'source': self.source, 'body': self.body, 'mapping': self.mapping})
+        request.session.flash({"type": self.type,
+                               'source': self.source,
+                               'body': self.body,
+                               'mapping': self.mapping,
+                               'domain': self.domain})
 
+        # TODO: refactor it
         while True:
             try:
                 request.session._set_cookie(request.response)

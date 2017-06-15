@@ -4,7 +4,7 @@
             <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
                     aria-hidden="true">&times;</span></button>
         {% endif %}
-        {% if message['source'] %}<b style="font-size: larger; letter-spacing: -1px">{{ _(message['source'], mapping=message['mapping']) | safe }}</b>:{% endif %}
-        {{ _(message['body'], mapping=message['mapping']) }}
+        {% if message['source'] %}<b style="font-size: larger; letter-spacing: -1px">{{ _(message['source'], mapping=message['mapping'], domain=message['domain']) | safe }}</b>:{% endif %}
+        {{ _(message['body'], mapping=message['mapping'], domain=message['domain']) }}
     </div>
 {% endfor %}

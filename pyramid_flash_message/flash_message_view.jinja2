@@ -9,9 +9,9 @@
             {% endif %}
 
             {% if message['source'] %}
-                <b style="font-size: larger; letter-spacing: -1px">{{ _(message['source'], mapping=message['mapping']) | safe }}</b>
+                <b style="font-size: larger; letter-spacing: -1px">{{ _(message['source'], mapping=message['mapping'], domain=message['domain']) | safe }}</b>
                 :{% endif %}
-            {{ _(message['body'], mapping=message['mapping']) }}
+            {{ _(message['body'], mapping=message['mapping'], domain=message['domain']) }}
         </div>
     {% endfor %}
 
@@ -47,5 +47,5 @@
 
 {% endblock content %}
 {% block title %}
-    messages
+    {{ _('flash_messages_page_title') }}
 {% endblock %}
