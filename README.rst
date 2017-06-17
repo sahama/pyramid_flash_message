@@ -1,7 +1,11 @@
-Pyramid FLASH MESSAGE
+Pyramid Flash Message
 =====================
 
 Small tool to add and show flash messages
+
+usage
+-----
+
 for add new message to flash message queue
 
 .. code-block:: python
@@ -19,6 +23,13 @@ by default in instant of MessageQueue added to request object so you can use req
     request.flash_message.add('some message')
     request.flash_message.add('danger message', message_type='danger')
     request.flash_message.add('danger message', message_type=request.flash_message.danger)
+
+you also can pass translation mapping and translation domain to it when you add new message or create new instance of MessageQueue.
+
+.. code-block:: python
+
+    request.flash_message.add('some message ${var1}', mapping={'var1': 123})
+    request.flash_message.add('some message', domain='some_domain')
 
 pyramid_flash_message use default pyramid i18n system. so you can pass `mapping` arg to use in translation.
 also if you like to show source of message you can use `source` arg.

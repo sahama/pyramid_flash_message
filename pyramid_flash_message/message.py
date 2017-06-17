@@ -11,32 +11,33 @@ class MessageQueue():
         self.type = message_type
         self.source = source
         self.mapping = mapping
+        self.domain = domain
 
         if not (source):
             self.body = 'no notice found'
             self.type = MessageQueue.info
 
     def add(self, body, message_type=None, source=None, mapping=None, domain=None, **kwargs):
-        if message_type:
-            self.type = message_type
-        if source:
-            self.source = source
-        if mapping:
-            self.mapping = mapping
+        if not message_type:
+            message_type = self.type
+        if not source:
+            source = self.source
+        if not mapping:
+            mapping = self.mapping
+        if not domain:
+            domain = self.domain
 
-        self.domain = domain
-        self.body = body
 
-        # TODO: check if message queue is full
 
         request = get_current_request()
 
-        request.session.flash({"type": self.type,
-                               'source': self.source,
-                               'body': self.body,
-                               'mapping': self.mapping,
-                               'domain': self.domain})
+        request.session.flash({"type": message_type,
+                               'source': source,
+                               'body': body,
+                               'mapping': mapping,
+                               'domain': domain})
 
+        # TODO: check if message queue is full
         # TODO: refactor it
         while True:
             try:
@@ -50,6 +51,7 @@ class MessageQueue():
         return len(request.session.peek_flash())
 
     def __repr__(self):
+        # TODO: this get just last message. modify to get list of all messages
         request = get_current_request()
         user = request.authenticated_userid
         return 'source:{0} ip:{4} type:{1} user:{2} message:{3}'.format(
