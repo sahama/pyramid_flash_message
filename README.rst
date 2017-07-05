@@ -90,6 +90,11 @@ You can use `project issue page <https://github.com/sahama/pyramid_flash_message
 Changes
 =======
 
+v 0.2.3
+-------
+
+ - handle error in session don't found
+
 v 0.2.2
 -------
 
