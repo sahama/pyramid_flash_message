@@ -1,4 +1,7 @@
 from pyramid.threadlocal import get_current_request
+import logging
+
+log = logging.getLogger(__name__)
 
 
 class MessageQueue():
@@ -27,24 +30,37 @@ class MessageQueue():
         if not domain:
             domain = self.domain
 
-
-
         request = get_current_request()
 
-        request.session.flash({"type": message_type,
-                               'source': source,
-                               'body': body,
-                               'mapping': mapping,
-                               'domain': domain})
-
-        # TODO: check if message queue is full
+        # TODO: check if session is enabled
         # TODO: refactor it
-        while True:
-            try:
-                request.session._set_cookie(request.response)
-                break
-            except:
-                request.session['_f_'].pop(0)
+        try:
+
+            request.session.flash({"type"   : message_type,
+                                   'source' : source,
+                                   'body'   : body,
+                                   'mapping': mapping,
+                                   'domain' : domain})
+
+            # TODO: check if message queue is full
+            # TODO: refactor it
+            while True:
+                try:
+                    request.session._set_cookie(request.response)
+                    break
+                except:
+                    log.warning('session if full. we have to remove some message message_queue.')
+                    request.session['_f_'].pop(0)
+        except:
+            log.error("can not access to session. message can't add to message_queue")
+            log.info("message is: source:{source} type:{type} body:{body} mapping:{mapping} domain:{domain}".format(
+                type=message_type,
+                source=source,
+                body=body,
+                mapping=mapping,
+                domain=domain
+                )
+            )
 
     def __len__(self):
         request = get_current_request()
